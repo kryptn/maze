@@ -12,20 +12,6 @@ class Node(object):
       self.left = False
       self.right = False
 
-   @property
-   def top(self):
-      return [1,int(self.up),1]
-   
-   @property
-   def mid(self):
-      #return [int(self.left),0,int(self.right)]
-      return [0,int(self.right)]
-   
-   @property
-   def bottom(self):
-      return [int(self.down),1]
-      #return [1,int(self.down),1]
-   
    def __repr__(self):
       return str(self.location)
 
@@ -39,14 +25,14 @@ class Maze(object):
       return grid
 
    def show(self):
-      data = (self.width+1) * [1]
+      data = (self.width*2+1) * [1]
       for row in self.grid:
-         top, mid, bottom = [1], [1], [1]
+         mid, bottom = [1], [1]
          for node in row:
-            mid += node.mid
-            bottom += node.bottom
+         	mid += [0, int(node.right)]
+         	bottom += [int(node.down), 1]
          data += mid + bottom
-         #data += top + mid + bottom
+      data = map(lambda x: int(not x), data)
       im = Image.new('1', (self.width*2+1, self.height*2+1))
       im.putdata(data)
       im.save('maze.png')
@@ -83,4 +69,9 @@ class Drunk(Maze):
       self.grid[rx][ry].visited = True
       while visited < nodes:
       	pass
-         
+
+def t():
+	m = PoC(300,300)
+	m.make()
+	m.show()
+
