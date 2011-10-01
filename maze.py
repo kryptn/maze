@@ -1,5 +1,4 @@
 #!/usr/bin/python
-
 import Image, random
 
 class Node(object):
@@ -19,11 +18,13 @@ class Node(object):
    
    @property
    def mid(self):
-      return [int(self.left),0,int(self.right)]
+      #return [int(self.left),0,int(self.right)]
+      return [0,int(self.right)]
    
    @property
    def bottom(self):
-      return [1,int(self.down),1]
+      return [int(self.down),1]
+      #return [1,int(self.down),1]
    
    def __repr__(self):
       return str(self.location)
@@ -38,15 +39,15 @@ class Maze(object):
       return grid
 
    def show(self):
-      data = list()
+      data = (self.width+1) * [1]
       for row in self.grid:
-         top, mid, bottom = list(), list(), list()
+         top, mid, bottom = [1], [1], [1]
          for node in row:
-            top += node.top
             mid += node.mid
             bottom += node.bottom
-         data += top + mid + bottom
-      im = Image.new('1', (self.width*3, self.height*3))
+         data += mid + bottom
+         #data += top + mid + bottom
+      im = Image.new('1', (self.width*2+1, self.height*2+1))
       im.putdata(data)
       im.save('maze.png')
       im.show()
