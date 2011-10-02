@@ -3,7 +3,7 @@ import Image, random, time
 
 class Node(object):
 
-   """ Node class, holds information about each node """
+   """ Represents a node in the grid """
    def __init__(self, x, y):
       self.location = (x,y)
       self.visited = False
