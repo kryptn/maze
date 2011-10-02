@@ -23,17 +23,17 @@ class Maze(object):
       return grid
 
    def show(self):
-      data = (self.width*2+2) * [1]
+      data = []#(self.width*2+2) * [1]
       for row in self.grid:
-         mid, bottom = [1], [1]
+         mid, bottom = [], []
          for node in row:
          	mid += [0, int(node.right)]
          	bottom += [int(node.down), 1]
          data += mid + [0] + bottom + [0] 
-      data[self.width*2+2]
+      data[self.width*2+1] = 1
       data[-1] = 1
-      data += (self.width*2+2) * [0]
-      im = Image.new('1', (self.width*2+2, self.height*2+2))
+      data += (self.width*2) * [0]
+      im = Image.new('1', (self.width*2+1, self.height*2+1))
       im.putdata(data)
       im.save('maze.png')
       im.show()
@@ -148,4 +148,6 @@ def t():
 	m.make()
 	m.show()
 
-m = Maze(10,10)
+m = BTS(10,10)
+m.make()
+m.show()
