@@ -2,6 +2,8 @@
 import Image, random, time
 
 class Node(object):
+
+   """ Node class, holds information about each node """
    def __init__(self, x, y):
       self.location = (x,y)
       self.visited = False
@@ -14,7 +16,9 @@ class Node(object):
       return str(self.location)
 
 class Maze(object):
+   
    def initialize(self, height, width,):
+      """ makes the maze grid itself """
       grid = list()
       for x in xrange(height):
          grid.append(list())
@@ -23,7 +27,8 @@ class Maze(object):
       return grid
 
    def show(self):
-      data = []#(self.width*2+2) * [1]
+      """ makes maze to an image file """
+      data = []
       for row in self.grid:
          mid, bottom = [], []
          for node in row:
@@ -38,10 +43,9 @@ class Maze(object):
       im.save('maze.png')
       im.show()
 
-   def make(self):
-      pass
 
    def nextBranch(self, x, y, limitNew=False, debug=False):
+      """ finds next node to branch to """
       valid = list()
       if x > 0:
          valid.append((x-1, y, self.grid[x-1][y].visited))
@@ -68,6 +72,7 @@ class Maze(object):
          return False
       
    def connect(self, p, c):
+      """ connects two nodes """
       x1, y1 = p
       x2, y2 = c
 
@@ -87,16 +92,20 @@ class Maze(object):
             self.grid[x2][y2].right = True
 
 
+   def make(self):
+      """
+      placeholder make function, extend and 
+      write your own algorithm
+      """
+      pass
 
    def __init__(self, x, y):
+      """ m = Maze(width, height) """
       self.height = x
       self.width = y
       self.grid = self.initialize(self.height, self.width)
-
-
-class PoC(Maze):
-   def make(self):
-      pass
+      self.make()
+      self.show()
 
 class Drunk(Maze):
    def make(self):
@@ -107,22 +116,12 @@ class Drunk(Maze):
       location = (rx, ry)
       self.grid[rx][ry].visited = True
       while visited < nodes:
-         next = self.nextBranch(rx, ry)
-         if next[2] == 'up':
-            self.grid[rx][ry].up = True
-            self.grid[next[0]][next[1]].down = True
-         if next[2] == 'down':
-            self.grid[rx][ry].down = True
-            self.grid[next[0]][next[1]].up = True
-         if next[2] == 'left':
-            self.grid[rx][ry].left = True
-            self.grid[next[0]][next[1]].right = True
-         if next[2] == 'right':
-            self.grid[rx][ry].right = True
-            self.grid[next[0]][next[1]].left = True
-         visited += 1
+         pass
 
-class BTS(Maze):
+class RecursiveBacktrack(Maze):
+   """ 
+   Uses the Recursive Backtrack algorithm
+   """
    def make(self):
       stack, cont = list(), True
       rx = random.randint(0, self.width-1)
@@ -141,13 +140,3 @@ class BTS(Maze):
                stack.pop(-1)
             else:
                cont = False
-
-
-def t():
-	m = PoC(300,300)
-	m.make()
-	m.show()
-
-m = BTS(10,10)
-m.make()
-m.show()
