@@ -2,7 +2,6 @@
 import Image, random, time
 
 class Node(object):
-
    """ Represents a node in the grid """
    def __init__(self, x, y):
       self.location = (x,y)
@@ -16,7 +15,6 @@ class Node(object):
       return str(self.location)
 
 class Maze(object):
-   
    def initialize(self, height, width,):
       """ makes the maze grid itself """
       grid = list()
@@ -43,8 +41,7 @@ class Maze(object):
       im.save('maze.png')
       im.show()
 
-
-   def nextBranch(self, x, y, limitNew=False, debug=False):
+   def nextBranch(self, x, y, limitNew=False, returnList=False):
       """ finds next node to branch to """
       valid = list()
       if x > 0:
@@ -63,11 +60,12 @@ class Maze(object):
                actuallyValid.append(coord)
          valid = actuallyValid
 
-      if debug:
-         return valid
+      valid = map(lambda x: x[:2], valid)
 
-      if valid:
-         return random.choice(valid)[:2]
+      if returnList:
+         return valid
+      elif valid:
+         return random.choice(valid)
       else:
          return False
       
@@ -91,7 +89,6 @@ class Maze(object):
             self.grid[x1][y1].left = True
             self.grid[x2][y2].right = True
 
-
    def make(self):
       """
       placeholder make function, extend and 
@@ -104,10 +101,11 @@ class Maze(object):
       self.height = x
       self.width = y
       self.grid = self.initialize(self.height, self.width)
-      self.make()
-      self.show()
+      #self.make()
+      #self.show()
 
 class Drunk(Maze):
+   """ totally doesn't work yet """
    def make(self):
       nodes = self.height * self.width
       visited = 1
@@ -121,6 +119,7 @@ class Drunk(Maze):
 class RecursiveBacktrack(Maze):
    """ 
    Uses the Recursive Backtrack algorithm
+   m = RecursiveBacktrack(width, height)
    """
    def make(self):
       stack, cont = list(), True
@@ -140,3 +139,21 @@ class RecursiveBacktrack(Maze):
                stack.pop(-1)
             else:
                cont = False
+
+class GrowingTree(Maze):
+   """ not working yet """
+   def make(self):
+      rx = random.randint(0, self.width-1)
+      ry = random.randint(0, self.height-1)
+      self.grid[rx][ry].visited = True
+      stack = [(rx, ry)]
+      while stack:
+         current = random.choice(stack)
+         valid = self.nextBranch(current[0], current[1], True, True)
+         if valid:
+            next = random.choice(valid)
+            self.grid[next[0]][next[1]].visited = True
+            self.connect(current, next)
+            stack += valid
+         else:
+            stack.pop(stack.index(current))
