@@ -40,6 +40,27 @@ class Maze(object):
       im.putdata(data)
       im.save('maze.png')
       im.show()
+   
+   def findDirection(self, p1, p2):
+      x1, y1 = p1
+      x2, y2 = p2
+
+      if x1 == x2:
+         if y1 > y2: #down
+            return 'down'
+         else: #up
+            return 'up'
+      else:
+         if x1 > x2: #right
+            return 'right'        
+         else: #left
+            return 'left'
+   
+   def makeBinaryTree(self, point, origin=None):
+      pass
+
+   def solve(self):
+      pass
 
    def nextBranch(self, x, y, limitNew=False, returnList=False):
       """ finds next node to branch to """
@@ -73,21 +94,19 @@ class Maze(object):
       """ connects two nodes """
       x1, y1 = p
       x2, y2 = c
-
-      if x1 == x2:
-         if y1 > y2: #down
-            self.grid[x1][y1].down = True
-            self.grid[x2][y2].up = True
-         else: #up
-            self.grid[x1][y1].up = True
-            self.grid[x2][y2].down = True
-      else:
-         if x1 > x2: #right
-            self.grid[x1][y1].right = True
-            self.grid[x2][y2].left = True         
-         else: #left
-            self.grid[x1][y1].left = True
-            self.grid[x2][y2].right = True
+      d = self.findDirection(p, c)
+      if   d == 'down':
+         self.grid[x1][y1].down = True
+         self.grid[x2][y2].up = True
+      elif d == 'up':
+         self.grid[x1][y1].up = True
+         self.grid[x2][y2].down = True
+      elif d == 'right':
+         self.grid[x1][y1].right = True
+         self.grid[x2][y2].left = True         
+      elif d == 'left':
+         self.grid[x1][y1].left = True
+         self.grid[x2][y2].right = True
 
    def make(self):
       """
@@ -101,6 +120,8 @@ class Maze(object):
       self.height = x
       self.width = y
       self.grid = self.initialize(self.height, self.width)
+      self.randx = random.randint(0, self.height-1)
+      self.randy = random.randint(0, self.width-1)
       #self.make()
       #self.show()
 
@@ -157,3 +178,5 @@ class GrowingTree(Maze):
             stack += valid
          else:
             stack.pop(stack.index(current))
+
+rb = RecursiveBacktrack
